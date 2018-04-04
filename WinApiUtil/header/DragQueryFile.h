@@ -35,8 +35,12 @@ namespace WinApiUtil
 
 			bool operator==(const Iterator& x) const noexcept;
 			bool operator!=(const Iterator& x) const noexcept;
+
+			difference_type operator-(const Iterator& x) const noexcept;
+
 			reference operator*();
 			Iterator& operator++() noexcept;
+			Iterator& operator+=(difference_type) noexcept;
 
 		private:
 			Iterator(HDROP hDrop, std::size_t index);

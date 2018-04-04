@@ -61,6 +61,11 @@ namespace WinApiUtil
 		return std::rel_ops::operator!=(*this, x);
 	}
 
+	auto DragQueryRange::Iterator::operator-(const Iterator& x) const noexcept -> difference_type
+	{
+		return mIndex - x.mIndex;
+	}
+
 	auto DragQueryRange::Iterator::operator*() -> reference
 	{
 		if (mBuffer.empty()) {
@@ -76,6 +81,13 @@ namespace WinApiUtil
 	auto DragQueryRange::Iterator::operator++() noexcept -> Iterator&
 	{
 		++mIndex;
+		mBuffer.clear();
+		return *this;
+	}
+
+	auto DragQueryRange::Iterator::operator+=(difference_type offset) noexcept -> Iterator&
+	{
+		mIndex += offset;
 		mBuffer.clear();
 		return *this;
 	}

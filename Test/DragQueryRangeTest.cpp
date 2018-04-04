@@ -9,18 +9,6 @@ namespace Test
 {		
 	using WinApiUtil::DragQueryRange;
 
-	template<class, class = void>
-	struct check_iterator_traits : std::false_type
-	{
-	};
-
-	template<class T>
-	struct check_iterator_traits<T, std::void_t<
-		typename std::iterator_traits<T>::value_type
-		>> : std::true_type
-	{
-	};
-
 	TEST_CLASS(DragQueryRangeTest)
 	{
 	public:
@@ -44,7 +32,9 @@ namespace Test
 
 		TEST_METHOD(TestIteratorTraits)
 		{
-			Assert::IsTrue(check_iterator_traits<DragQueryRange>::value);
+			Assert::IsTrue(std::is_same<std::iterator_traits<DragQueryRange>::iterator_category, std::random_access_iterator_tag>::value);
+			Assert::IsTrue(std::is_const<std::remove_reference<std::iterator_traits<DragQueryRange>::reference>::type>::value);
+			Assert::IsTrue(std::is_const<std::remove_pointer<std::iterator_traits<DragQueryRange>::pointer>::type>::value);
 		}
 
 		TEST_METHOD(TestIteratorConstructible)
@@ -61,6 +51,19 @@ namespace Test
 			Assert::IsTrue(std::is_nothrow_assignable<iterator, iterator>::value);
 			Assert::IsTrue(std::is_nothrow_move_assignable<iterator>::value);
 			Assert::IsTrue(std::is_copy_assignable<iterator>::value);
+		}
+
+		TEST_METHOD(TestIterator)
+		{
+			using iterator = DragQueryRange::iterator;
+			iterator it;
+			Assert::AreEqual(std::distance(it, it), 0);
+
+			iterator it2 = it;
+			std::advance(it2, 5);
+			std::advance(it2, -2);
+			Assert::AreEqual(std::distance(it, it2), 5 - 2);
+
 		}
 	};
 }
