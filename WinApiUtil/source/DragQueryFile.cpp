@@ -45,7 +45,7 @@ namespace WinApiUtil
 	}
 
 #pragma region iterator
-	DragQueryRange::Iterator::Iterator(HDROP hDrop, std::size_t index)
+	DragQueryRange::Iterator::Iterator(HDROP hDrop, UINT index)
 		: mhDrop(hDrop)
 		, mIndex(index)
 	{
@@ -70,8 +70,9 @@ namespace WinApiUtil
 	{
 		if (mBuffer.empty()) {
 			if (const auto size = ::DragQueryFileW(mhDrop, mIndex, nullptr, 0)) {
-				mBuffer.resize(size + 1);
-				::DragQueryFileW(mhDrop, mIndex, &mBuffer[0], mBuffer.size());
+				const auto bufferSize = size + 1;
+				mBuffer.resize(bufferSize);
+				::DragQueryFileW(mhDrop, mIndex, &mBuffer[0], bufferSize);
 			}
 		}
 

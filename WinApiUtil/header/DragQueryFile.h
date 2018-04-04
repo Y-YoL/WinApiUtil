@@ -27,7 +27,7 @@ namespace WinApiUtil
 		public:
 			using iterator_category = std::random_access_iterator_tag;
 			using value_type = std::wstring;
-			using difference_type = std::ptrdiff_t;
+			using difference_type = signed int;
 			using pointer = const value_type*;
 			using reference = const value_type&;
 
@@ -43,11 +43,11 @@ namespace WinApiUtil
 			Iterator& operator+=(difference_type) noexcept;
 
 		private:
-			Iterator(HDROP hDrop, std::size_t index);
+			Iterator(HDROP hDrop, UINT index);
 
 		private:
 			HDROP mhDrop;
-			std::size_t mIndex;
+			UINT mIndex;
 			std::wstring mBuffer;
 		};
 
@@ -97,7 +97,7 @@ namespace WinApiUtil
 
 	private:
 		const HDROP mhDrop;
-		const std::size_t mCount;
+		const UINT mCount;
 		bool mAutoRelease;
 	};
 }
